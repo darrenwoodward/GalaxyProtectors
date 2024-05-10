@@ -1,0 +1,79 @@
+[gd_scene load_steps=12 format=3 uid="uid://dmxej16m8a0ax"]
+
+[ext_resource type="Script" path="res://powerups/increase_rate_of_fire.gd" id="1_jfkfj"]
+[ext_resource type="Texture2D" uid="uid://b8xn0afxukohh" path="res://assets/blue_power_up.png" id="2_tdas8"]
+[ext_resource type="Script" path="res://components/move_component.gd" id="3_83sgx"]
+[ext_resource type="Script" path="res://components/scale_component.gd" id="4_36yh0"]
+[ext_resource type="Script" path="res://components/hitbox_component.gd" id="5_trcr5"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o2iq8"]
+atlas = ExtResource("2_tdas8")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w3mrx"]
+atlas = ExtResource("2_tdas8")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i5gby"]
+atlas = ExtResource("2_tdas8")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0gpd2"]
+atlas = ExtResource("2_tdas8")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_gptye"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o2iq8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w3mrx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i5gby")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0gpd2")
+}],
+"loop": true,
+"name": &"default",
+"speed": 7.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6xp0j"]
+size = Vector2(14, 14)
+
+[node name="increaseRateOfFire" type="Node2D"]
+script = ExtResource("1_jfkfj")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_gptye")
+autoplay = "default"
+frame = 1
+frame_progress = 0.980432
+
+[node name="MoveComponent" type="Node" parent="." node_paths=PackedStringArray("actor")]
+script = ExtResource("3_83sgx")
+actor = NodePath("..")
+velocity = Vector2(0, 30)
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+position = Vector2(5.96046e-07, 1.19209e-07)
+scale = Vector2(0.7, 0.7)
+
+[node name="ScaleComponent" type="Node" parent="." node_paths=PackedStringArray("sprite")]
+script = ExtResource("4_36yh0")
+sprite = NodePath("../AnimatedSprite2D")
+scale_amount = Vector2(1.25, 1.25)
+
+[node name="HitboxComponent" type="Area2D" parent="."]
+collision_layer = 0
+script = ExtResource("5_trcr5")
+damage = 0.0
+rateOfFireIncrease = 150.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent"]
+shape = SubResource("RectangleShape2D_6xp0j")
+debug_color = Color(0, 0.624099, 0.531968, 0.42)
